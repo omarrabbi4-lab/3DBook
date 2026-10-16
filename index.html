@@ -7,19 +7,17 @@
 <title>রাব্বির 3D বুক 📖</title>
 
 <style>
-:root{
+:root {
   --bg:#070914;
-  --card:#111831;
-  --border:#39476f;
   --text:#f5f3ff;
   --muted:#b3bdd9;
+  --line:#39476f;
   --purple:#a855f7;
   --blue:#38bdf8;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  min-height:100vh;
+  margin:0;min-height:100vh;
   font-family:system-ui,sans-serif;
   color:var(--text);
   background:
@@ -28,127 +26,126 @@ body{
     var(--bg);
 }
 button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-header{
-  position:sticky;top:0;z-index:10;
-  display:flex;align-items:center;
-  justify-content:space-between;gap:8px;
-  padding:14px;
-  background:#080b18ed;
-  border-bottom:1px solid #39476f;
-  backdrop-filter:blur(15px);
-}
-.logo{font-weight:900;font-size:18px}
-.logo span{color:#c084fc}
 button{
-  color:white;background:#171e3b;
+  cursor:pointer;color:white;
+  background:#171e3b;
   border:1px solid #465580;
   border-radius:11px;padding:10px 13px;
 }
 button:active{transform:scale(.97)}
-.hero{text-align:center;padding:28px 12px 14px}
-.hero h1{font-size:clamp(26px,6vw,43px);margin:12px 0}
+header{
+  position:sticky;top:0;z-index:10;
+  display:flex;justify-content:space-between;
+  align-items:center;gap:8px;padding:13px;
+  background:#080b18ed;
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(14px);
+}
+.logo{font-weight:900;font-size:18px}
+.logo span{color:#c084fc}
+.hero{text-align:center;padding:26px 12px 14px}
+.hero h1{font-size:clamp(25px,5vw,42px);margin:12px 0}
 .hero p{color:var(--muted);line-height:1.7}
 .badge{
-  color:#e9d5ff;background:#261644;
-  border:1px solid #7548a8;border-radius:30px;
-  padding:6px 12px;font-size:12px;
+  display:inline-block;color:#e9d5ff;
+  background:#261644;border:1px solid #7548a8;
+  border-radius:30px;padding:6px 12px;font-size:12px;
 }
-.book-area{
-  width:min(950px,96%);
-  margin:12px auto;perspective:1600px;
-}
+.area{width:min(980px,96%);margin:20px auto;perspective:2200px}
 .book{
-  display:grid;grid-template-columns:1fr 1fr;
-  position:relative;transform-style:preserve-3d;
-  filter:drop-shadow(0 22px 28px #0009);
-}
-.book:after{
-  content:"";position:absolute;left:50%;top:10px;bottom:10px;
-  width:9px;transform:translateX(-50%);
-  background:linear-gradient(90deg,#080b18,#6874a0,#080b18);
-  border-radius:5px;z-index:2;
+  position:relative;display:grid;
+  grid-template-columns:1fr 1fr;min-height:470px;
+  transform-style:preserve-3d;
+  filter:drop-shadow(0 24px 28px #0009);
 }
 .page{
-  min-width:0;min-height:470px;padding:25px;
-  border:1px solid var(--border);
-  background:linear-gradient(145deg,#151e3c,#0b1023);
-  overflow:hidden;
+  position:relative;min-width:0;min-height:470px;
+  padding:clamp(18px,3vw,30px);overflow:hidden;
+  border:1px solid var(--line);
+  background:linear-gradient(135deg,#172344,#0b1023 80%);
+  backface-visibility:hidden;
 }
-.left{border-radius:16px 3px 3px 16px}
-.right{border-radius:3px 16px 16px 3px}
-.page h2{font-size:clamp(22px,4vw,32px);line-height:1.3}
-.page p{color:var(--muted);line-height:1.8}
-.kicker{font-size:12px;color:var(--blue);font-weight:800}
-.big-icon{font-size:48px;margin-top:18px}
-.glow{
-  background:linear-gradient(90deg,#38bdf8,#c084fc,#f0abfc);
-  color:transparent;background-clip:text;
+.left{border-radius:16px 2px 2px 16px;box-shadow:inset -15px 0 22px #02061155}
+.right{border-radius:2px 16px 16px 2px;box-shadow:inset 15px 0 22px #02061155}
+.spine{
+  position:absolute;z-index:4;left:50%;top:4px;bottom:4px;
+  width:10px;transform:translateX(-50%);
+  background:linear-gradient(90deg,#030611,#6874a0,#080b18);
+  border-radius:5px;pointer-events:none;
 }
-.grid{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;margin-top:18px;
+.sheet{
+  position:absolute;z-index:5;top:0;bottom:0;
+  width:50%;transform-style:preserve-3d;display:none;
 }
-.tile{
-  min-width:0;padding:13px;border:1px solid #39476f;
-  background:#121b34;border-radius:13px;
+.sheet.next{left:50%;transform-origin:left center}
+.sheet.prev{left:0;transform-origin:right center}
+.face{
+  position:absolute;inset:0;padding:clamp(18px,3vw,30px);
+  overflow:hidden;border:1px solid var(--line);
+  background:linear-gradient(135deg,#172344,#0b1023 80%);
+  backface-visibility:hidden;
 }
+.face.front{border-radius:2px 16px 16px 2px}
+.face.back{transform:rotateY(180deg);border-radius:16px 2px 2px 16px}
+.sheet.prev .front{border-radius:16px 2px 2px 16px}
+.sheet.prev .back{border-radius:2px 16px 16px 2px}
+.sheet.go-next{display:block;animation:flipNext .8s ease-in-out forwards}
+.sheet.go-prev{display:block;animation:flipPrev .8s ease-in-out forwards}
+@keyframes flipNext{
+  0%{transform:rotateY(0)}
+  45%{filter:brightness(.75)}
+  100%{transform:rotateY(-180deg)}
+}
+@keyframes flipPrev{
+  0%{transform:rotateY(0)}
+  45%{filter:brightness(.75)}
+  100%{transform:rotateY(180deg)}
+}
+.kicker{font-size:11px;letter-spacing:1.4px;color:var(--blue);font-weight:800}
+.page h2,.face h2{font-size:clamp(22px,3.6vw,31px);line-height:1.3}
+.page p,.face p{color:var(--muted);line-height:1.75}
+.big{font-size:44px;margin-top:18px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:16px}
+.tile{padding:12px;border:1px solid var(--line);background:#121b34;border-radius:13px;min-width:0}
 .tile b{display:block;margin:5px 0}
-.tile small{color:var(--muted);line-height:1.6}
-.tile .emoji{font-size:23px}
+.tile small{color:var(--muted);line-height:1.5}
 .field{
-  width:100%;padding:11px;margin:6px 0;
-  color:white;background:#080e20;
-  border:1px solid #465580;border-radius:10px;
+  width:100%;padding:10px;margin:5px 0;color:white;
+  background:#080e20;border:1px solid #465580;border-radius:10px;
 }
-textarea.field{min-height:90px;resize:vertical}
-.action{
-  background:linear-gradient(110deg,#2563eb,#9333ea);
-  border:0;font-weight:bold;margin-top:7px;
-}
+textarea.field{min-height:75px;resize:vertical}
+.action{background:linear-gradient(110deg,#2563eb,#9333ea);border:0;margin-top:7px}
 .result{
-  margin-top:10px;padding:12px;
-  background:#080e20;border:1px dashed #465580;
-  border-radius:10px;white-space:pre-wrap;
-  overflow-wrap:anywhere;
+  margin-top:9px;padding:10px;background:#080e20;
+  border:1px dashed #465580;border-radius:10px;
+  white-space:pre-wrap;overflow-wrap:anywhere;
 }
-.controls{
-  display:flex;justify-content:center;align-items:center;
-  flex-wrap:wrap;gap:12px;padding:16px 8px;
-}
+.controls{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 8px}
 .nav{min-width:110px;font-weight:bold}
-.next{background:linear-gradient(110deg,#2563eb,#9333ea);border:0}
-#pageCount{font-size:13px;color:#d8b4fe}
-.dots{display:flex;justify-content:center;gap:7px;padding:4px 10px 22px}
+.nextbtn{background:linear-gradient(110deg,#2563eb,#9333ea);border:0}
+#count{color:#d8b4fe;font-size:13px}
+.dots{display:flex;justify-content:center;gap:7px;padding:4px 10px 20px}
 .dot{width:9px;height:9px;padding:0;border:0;border-radius:50%;background:#414d70}
 .dot.active{background:#c084fc;box-shadow:0 0 12px #c084fc}
-footer{text-align:center;color:#8995b8;font-size:12px;padding:20px}
+footer{text-align:center;color:#8995b8;font-size:12px;padding:18px}
 a{color:#93c5fd;overflow-wrap:anywhere}
-.anim{animation:flip .4s ease}
-@keyframes flip{
-  from{opacity:.3;transform:rotateY(-8deg) translateX(8px)}
-  to{opacity:1;transform:rotateY(0) translateX(0)}
-}
-body.light{
-  --bg:#e9edff;--text:#15182e;--muted:#4b5673;
-}
+body.light{--bg:#e9edff;--text:#15182e;--muted:#4b5673}
 body.light header{background:#e9edffed}
-body.light .page{background:linear-gradient(145deg,#f8f9ff,#dfe7ff)}
+body.light .page,body.light .face{background:linear-gradient(135deg,#f8f9ff,#dfe7ff)}
 body.light .tile{background:#edf0ff}
 body.light .field,body.light .result{background:white;color:#15182e}
 body.light button{color:#15182e}
-@media(max-width:600px){
-  .hero{padding-top:22px}
-  .book{grid-template-columns:1fr;gap:6px}
-  .book:after{display:none}
-  .page{min-height:320px;padding:20px}
+@media(max-width:620px){
+  .area{width:96%}
+  .book{grid-template-columns:1fr;gap:7px;min-height:0}
+  .page{min-height:330px;padding:19px}
   .left,.right{border-radius:14px}
-  .logo{font-size:15px}
-  header{padding:11px}
-  .grid{gap:8px}
+  .spine,.sheet{display:none!important}
+  .grid{gap:7px}.tile{padding:10px}
+  .logo{font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){
-  .anim{animation:none}
+  .sheet.go-next,.sheet.go-prev{animation-duration:.01ms}
 }
 </style>
 </head>
@@ -156,382 +153,203 @@ body.light button{color:#15182e}
 <body>
 <header>
   <div class="logo">📖 রাব্বির <span>3D বুক</span></div>
-  <div>
-    <button onclick="toggleTheme()">🌗 থিম</button>
-  </div>
+  <button onclick="document.body.classList.toggle('light')">🌗 থিম</button>
 </header>
 
 <section class="hero">
   <span class="badge">✦ MY DIGITAL WORLD ✦</span>
-  <h1>একটি বই, <span class="glow">অসংখ্য সম্ভাবনা</span></h1>
-  <p>পৃষ্ঠা উল্টাও, নতুন কিছু আবিষ্কার করো। 💜</p>
+  <h1>একটি বই, <span style="color:#c084fc">অসংখ্য সম্ভাবনা</span></h1>
+  <p>Next চাপো অথবা মোবাইলে সোয়াইপ করো। 💜</p>
 </section>
 
-<main class="book-area">
-  <div class="book">
-    <article class="page left anim" id="leftPage"></article>
-    <article class="page right anim" id="rightPage"></article>
+<main class="area">
+  <div class="book" id="book">
+    <article class="page left" id="left"></article>
+    <article class="page right" id="right"></article>
+    <div class="spine"></div>
+    <div class="sheet next" id="sheet">
+      <div class="face front" id="front"></div>
+      <div class="face back" id="back"></div>
+    </div>
   </div>
 </main>
 
 <div class="controls">
-  <button class="nav" id="prevBtn" onclick="previousPage()">← Previous</button>
-  <span id="pageCount">পৃষ্ঠা ১–২</span>
-  <button class="nav next" id="nextBtn" onclick="nextPage()">Next →</button>
+  <button class="nav" id="prev">← Previous</button>
+  <span id="count"></span>
+  <button class="nav nextbtn" id="next">Next →</button>
 </div>
 <div class="dots" id="dots"></div>
-
 <footer>Made with 💜 by Rabbi · রাব্বির 3D বুক</footer>
 
 <script>
-const pages = [
-{
- title:"স্বাগতম আমার 3D বুক-এ!",
- icon:"📖",
- desc:"এটি তোমার নিজের ডিজিটাল জগৎ। প্রতিটি পৃষ্ঠায় আছে নতুন ফিচার। Next চাপো এবং বইটি ঘুরে দেখো।",
- cards:[
-  ["🌌","আমার জগৎ","ডার্ক 3D ডিজাইন"],
-  ["✨","নতুন অভিজ্ঞতা","প্রতিটি পৃষ্ঠায় নতুন কিছু"]
- ]
-},
-{
- title:"Home Dashboard",
- icon:"🚀",
- desc:"সব প্রয়োজনীয় ফিচার এক জায়গায়।",
- cards:[
-  ["🧰","Smart Tools","ক্যালকুলেটর ও নোট"],
-  ["🖼️","Gallery","ছবি ও আইডিয়া"],
-  ["🎵","Music","নিজের অডিও চালাও"],
-  ["🎮","Games","ছোট গেম খেলো"]
- ]
-},
-{
- title:"আমার পরিচয়",
- icon:"👤",
- desc:"নিজের নাম ও পরিচিতি লিখে রাখো।",
- type:"profile"
-},
-{
- title:"Smart Calculator",
- icon:"🧮",
- desc:"সহজেই যোগ, বিয়োগ, গুণ ও ভাগ করো।",
- type:"calculator"
-},
-{
- title:"My Notes",
- icon:"📝",
- desc:"তোমার গুরুত্বপূর্ণ লেখা সেভ করে রাখো।",
- type:"notes"
-},
-{
- title:"Gallery & Ideas",
- icon:"🖼️",
- desc:"নিজের পছন্দের ছবি বা ওয়েব লিংক যোগ করো।",
- type:"gallery"
-},
-{
- title:"Music Zone",
- icon:"🎵",
- desc:"ফোনের অডিও ফাইল বেছে নিয়ে চালাও।",
- type:"music"
-},
-{
- title:"Mini Games",
- icon:"🎮",
- desc:"১ থেকে ১০-এর মধ্যে সঠিক সংখ্যা ধরো।",
- type:"game"
-},
-{
- title:"AI Zone",
- icon:"🤖",
- desc:"জনপ্রিয় AI সেবাগুলো দ্রুত খুলে নাও।",
- cards:[
-  ["✨","ChatGPT","AI সহকারী","https://chatgpt.com/"],
-  ["🎨","Canva","ডিজাইন তৈরি","https://www.canva.com/"],
-  ["🎬","CapCut","ভিডিও এডিটিং","https://www.capcut.com/"],
-  ["▶️","YouTube","ভিডিও প্ল্যাটফর্ম","https://www.youtube.com/"]
- ]
-},
-{
- title:"Contact & Settings",
- icon:"💌",
- desc:"নিজের যোগাযোগের তথ্য লিখে রাখো।",
- type:"contact"
-}
+const P=[
+{t:"স্বাগতম আমার 3D বুক-এ!",i:"📖",d:"এটি তোমার নিজের ডিজিটাল জগৎ। প্রতিটি পৃষ্ঠায় আছে নতুন ফিচার। Next চাপো এবং বইটি ঘুরে দেখো।",c:[["🌌","আমার জগৎ","ডার্ক 3D ডিজাইন"],["✨","নতুন অভিজ্ঞতা","প্রতি পৃষ্ঠায় নতুন কিছু"]]},
+{t:"Home Dashboard",i:"🚀",d:"সব প্রয়োজনীয় ফিচার এক জায়গায়।",c:[["🧰","Smart Tools","ক্যালকুলেটর ও নোট"],["🖼️","Gallery","ছবি ও আইডিয়া"],["🎵","Music","নিজের অডিও চালাও"],["🎮","Games","ছোট গেম"]]},
+{t:"আমার পরিচয়",i:"👤",d:"নিজের নাম ও পরিচিতি সেভ করো।",type:"profile"},
+{t:"Smart Calculator",i:"🧮",d:"যোগ, বিয়োগ, গুণ ও ভাগ করো।",type:"calc"},
+{t:"My Notes",i:"📝",d:"গুরুত্বপূর্ণ নোট এই ব্রাউজারে সেভ করো।",type:"notes"},
+{t:"Gallery & Ideas",i:"🖼️",d:"ছবি বা আইডিয়ার ওয়েব লিংক যোগ করো।",type:"gallery"},
+{t:"Music Zone",i:"🎵",d:"ফোনের অডিও ফাইল বেছে নিয়ে চালাও।",type:"music"},
+{t:"Mini Games",i:"🎮",d:"১ থেকে ১০-এর মধ্যে সঠিক সংখ্যা ধরো।",type:"game"},
+{t:"AI Zone",i:"🤖",d:"জনপ্রিয় AI সেবার শর্টকাট।",c:[["✨","ChatGPT","AI সহকারী","https://chatgpt.com/"],["🎨","Canva","ডিজাইন","https://www.canva.com/"],["🎬","CapCut","ভিডিও এডিট","https://www.capcut.com/"],["▶️","YouTube","ভিডিও","https://www.youtube.com/"]]},
+{t:"Contact & Settings",i:"💌",d:"নিজের যোগাযোগের তথ্য সেভ করো।",type:"contact"}
 ];
 
-let current=0;
-let secret=Math.floor(Math.random()*10)+1;
-
-const left=document.getElementById("leftPage");
-const right=document.getElementById("rightPage");
+let idx=0,busy=false,secret=1+Math.floor(Math.random()*10);
+const L=document.getElementById("left"),R=document.getElementById("right");
+const S=document.getElementById("sheet"),F=document.getElementById("front");
+const B=document.getElementById("back"),book=document.getElementById("book");
 
 function esc(s){
- return String(s??"").replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",
- '"':"&quot;","'":"&#39;"
- }[c]));
+ return String(s??"").replace(/[&<>"']/g,x=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[x]));
 }
 
-function cardsHTML(cards){
- return '<div class="grid">'+cards.map(c=>
- `<div class="tile">
- <div class="emoji">${c[0]}</div>
- <b>${esc(c[1])}</b>
- <small>${esc(c[2]||"নতুন ফিচার")}</small>
- ${c[3]?`<p><a href="${esc(c[3])}" target="_blank" rel="noopener">খুলুন ↗</a></p>`:""}
- </div>`
- ).join("")+"</div>";
-}
+function inner(p,n){
+ if(!p)return '<div class="kicker">THE END</div><div class="big">💜</div><h2>ধন্যবাদ!</h2><p>রাব্বির 3D বুক ঘুরে দেখার জন্য ধন্যবাদ।</p>';
+ let h=`<div class="kicker">RABBI'S 3D BOOK · ${String(n+1).padStart(2,"0")}</div><div class="big">${p.i}</div><h2>${p.t}</h2><p>${p.d}</p>`;
 
-function content(p){
- let html=`<div class="kicker">RABBI'S 3D BOOK</div>
- <div class="big-icon">${p.icon}</div>
- <h2>${p.title}</h2><p>${p.desc}</p>`;
+ if(p.c)h+='<div class="grid">'+p.c.map(x=>
+ `<div class="tile"><div>${x[0]}</div><b>${esc(x[1])}</b><small>${esc(x[2])}</small>${x[3]?`<p><a target="_blank" rel="noopener" href="${esc(x[3])}">খুলুন ↗</a></p>`:""}</div>`
+ ).join("")+'</div>';
 
- if(p.cards) return html+cardsHTML(p.cards);
+ if(p.type==="profile")h+='<div class="tile"><input class="field" id="pn" placeholder="তোমার নাম"><textarea class="field" id="pb" placeholder="নিজের পরিচিতি"></textarea><button class="action" onclick="saveProfile()">প্রোফাইল সেভ</button><div class="result" id="pr"></div></div>';
 
- if(p.type==="profile") html+=`
- <div class="tile">
- <input class="field" id="pName" placeholder="তোমার নাম">
- <textarea class="field" id="pBio" placeholder="নিজের পরিচিতি"></textarea>
- <button class="action" onclick="saveProfile()">প্রোফাইল সেভ</button>
- <div class="result" id="pResult"></div>
- </div>`;
+ if(p.type==="calc")h+='<div class="tile"><input class="field" id="a" type="number" placeholder="প্রথম সংখ্যা"><select class="field" id="op"><option value="+">যোগ (+)</option><option value="-">বিয়োগ (-)</option><option value="*">গুণ (×)</option><option value="/">ভাগ (÷)</option></select><input class="field" id="b" type="number" placeholder="দ্বিতীয় সংখ্যা"><button class="action" onclick="calc()">হিসাব করো</button><div class="result" id="cr">ফলাফল এখানে আসবে</div></div>';
 
- if(p.type==="calculator") html+=`
- <div class="tile">
- <input class="field" type="number" id="num1" placeholder="প্রথম সংখ্যা">
- <select class="field" id="operator">
- <option value="+">যোগ (+)</option>
- <option value="-">বিয়োগ (-)</option>
- <option value="*">গুণ (×)</option>
- <option value="/">ভাগ (÷)</option>
- </select>
- <input class="field" type="number" id="num2" placeholder="দ্বিতীয় সংখ্যা">
- <button class="action" onclick="calculate()">হিসাব করো</button>
- <div class="result" id="calcResult">ফলাফল এখানে আসবে</div>
- </div>`;
+ if(p.type==="notes")h+='<textarea class="field" id="nt" placeholder="তোমার নোট লেখো"></textarea><button class="action" onclick="saveNote()">নোট সেভ</button> <button onclick="clearNote()">মুছুন</button><div class="result" id="nr"></div>';
 
- if(p.type==="notes") html+=`
- <textarea class="field" id="noteText" placeholder="তোমার নোট লেখো..."></textarea>
- <button class="action" onclick="saveNote()">💾 নোট সেভ</button>
- <button onclick="clearNote()">মুছুন</button>
- <div class="result" id="noteResult"></div>`;
+ if(p.type==="gallery")h+='<div class="tile"><input class="field" id="gt" placeholder="লিংকের নাম"><input class="field" id="gu" placeholder="https://..."><button class="action" onclick="addGallery()">লিংক যোগ করো</button><div id="gr"></div></div>';
 
- if(p.type==="gallery") html+=`
- <div class="tile">
- <input class="field" id="gTitle" placeholder="ছবি বা আইডিয়ার নাম">
- <input class="field" id="gUrl" placeholder="https://example.com">
- <button class="action" onclick="addGallery()">লিংক যোগ করো</button>
- <div id="galleryResult"></div>
- </div>`;
+ if(p.type==="music")h+='<div class="tile"><input class="field" id="af" type="file" accept="audio/*"><audio id="ap" controls style="width:100%;margin-top:12px"></audio><p><small>অডিও সার্ভারে আপলোড হয় না।</small></p></div>';
 
- if(p.type==="music") html+=`
- <div class="tile">
- <input class="field" id="audioFile" type="file" accept="audio/*">
- <audio id="audioPlayer" controls style="width:100%;margin-top:12px"></audio>
- <p><small>অডিও ফাইল সার্ভারে আপলোড হয় না।</small></p>
- </div>`;
+ if(p.type==="game")h+='<div class="tile"><input class="field" id="guess" type="number" min="1" max="10" placeholder="১–১০"><button class="action" onclick="checkGame()">উত্তর দাও</button> <button onclick="newGame()">নতুন খেলা</button><div class="result" id="gameResult">চেষ্টা করো!</div></div>';
 
- if(p.type==="game") html+=`
- <div class="tile">
- <input class="field" id="guess" type="number" min="1" max="10" placeholder="১ থেকে ১০">
- <button class="action" onclick="checkGuess()">উত্তর দাও</button>
- <button onclick="resetGame()">নতুন খেলা</button>
- <div class="result" id="gameResult">চেষ্টা করো! 😄</div>
- </div>`;
+ if(p.type==="contact")h+='<div class="tile"><input class="field" id="cn" placeholder="তোমার নাম"><input class="field" id="ci" placeholder="ইমেইল বা সোশ্যাল লিংক"><textarea class="field" id="cm" placeholder="বার্তা"></textarea><button class="action" onclick="saveContact()">তথ্য সেভ</button><div class="result" id="conr">তথ্য এই ডিভাইসে সেভ হবে</div></div>';
 
- if(p.type==="contact") html+=`
- <div class="tile">
- <input class="field" id="cName" placeholder="তোমার নাম">
- <input class="field" id="cInfo" placeholder="ইমেইল বা সোশ্যাল লিংক">
- <textarea class="field" id="cMsg" placeholder="ছোট্ট বার্তা"></textarea>
- <button class="action" onclick="saveContact()">তথ্য সেভ</button>
- <div class="result" id="cResult">তথ্য এই ডিভাইসে সেভ হবে।</div>
- </div>`;
-
- return html;
+ return h;
 }
 
 function render(){
- const p1=pages[current];
- const p2=pages[current+1];
-
- left.innerHTML=content(p1);
- right.innerHTML=p2?content(p2):
- `<div class="kicker">THE END</div>
- <div class="big-icon">💜</div>
- <h2>ধন্যবাদ!</h2>
- <p>রাব্বির 3D বুক ঘুরে দেখার জন্য ধন্যবাদ।</p>
- <div class="tile"><b>✨ আরও ফিচার আসছে</b>
- <small>ভবিষ্যতে আরও টুল যোগ করা যাবে।</small></div>`;
-
- left.classList.remove("anim");
- right.classList.remove("anim");
- void left.offsetWidth;
- left.classList.add("anim");
- right.classList.add("anim");
-
- document.getElementById("pageCount").textContent=
- `পৃষ্ঠা ${current+1}–${Math.min(current+2,pages.length)} / ${pages.length}`;
-
- document.getElementById("prevBtn").disabled=current===0;
- document.getElementById("prevBtn").style.opacity=current===0?".4":"1";
- document.getElementById("nextBtn").textContent=
- current>=pages.length-2?"শেষ পৃষ্ঠা ✓":"Next →";
-
- document.getElementById("dots").innerHTML=pages.map((p,i)=>
- `<button class="dot ${i===current?"active":""}"
- onclick="goTo(${i})" aria-label="পৃষ্ঠা ${i+1}"></button>`
- ).join("");
-
- loadPageData(p1.type);
- if(p2) loadPageData(p2.type);
+ L.innerHTML=inner(P[idx],idx);
+ R.innerHTML=inner(P[idx+1],idx+1);
+ document.getElementById("count").textContent=`পৃষ্ঠা ${idx+1}–${Math.min(idx+2,P.length)} / ${P.length}`;
+ document.getElementById("prev").disabled=idx===0;
+ document.getElementById("prev").style.opacity=idx===0?".4":"1";
+ document.getElementById("next").textContent=idx>=P.length-2?"শেষ পৃষ্ঠা ✓":"Next →";
+ document.getElementById("dots").innerHTML=P.map((p,i)=>`<button class="dot ${i===idx?"active":""}" onclick="go(${i})" aria-label="পৃষ্ঠা ${i+1}"></button>`).join("");
+ load(P[idx]?.type);load(P[idx+1]?.type);
 }
 
-function nextPage(){
- if(current<pages.length-1){current=Math.min(current+2,pages.length-1);render()}
+function turn(dir){
+ if(busy)return;
+ let target=dir==="next"?Math.min(idx+2,P.length-1):Math.max(idx-2,0);
+ if(target===idx)return;
+ if(matchMedia("(max-width:620px)").matches){idx=target;render();return}
+ busy=true;book.style.pointerEvents="none";
+ S.className="sheet "+(dir==="next"?"next":"prev");
+ F.innerHTML=inner(P[dir==="next"?idx+1:idx],dir==="next"?idx+1:idx);
+ B.innerHTML=inner(P[target],target);
+ S.style.display="block";void S.offsetWidth;
+ S.classList.add(dir==="next"?"go-next":"go-prev");
+ setTimeout(()=>{
+  idx=target;S.className="sheet next";S.style.display="none";
+  book.style.pointerEvents="";busy=false;render();
+ },820);
 }
-function previousPage(){
- if(current>0){current=Math.max(0,current-2);render()}
-}
-function goTo(i){current=i;render()}
-function toggleTheme(){document.body.classList.toggle("light")}
+function go(i){if(busy)return;idx=i;render()}
+document.getElementById("next").onclick=()=>turn("next");
+document.getElementById("prev").onclick=()=>turn("prev");
 
-function save(key,value){
- try{localStorage.setItem("rabbibook_"+key,value)}
- catch(e){alert("এই ব্রাউজারে সেভ করা যাচ্ছে না।")}
-}
-function read(key){
- try{return localStorage.getItem("rabbibook_"+key)||""}
- catch(e){return ""}
-}
+function get(k){try{return localStorage.getItem("rb_"+k)||""}catch(e){return""}}
+function put(k,v){try{localStorage.setItem("rb_"+k,v)}catch(e){alert("এই ব্রাউজারে সেভ করা যাচ্ছে না")}}
 
 function saveProfile(){
- save("name",document.getElementById("pName").value);
- save("bio",document.getElementById("pBio").value);
- loadProfile();alert("প্রোফাইল সেভ হয়েছে!");
+ put("name",document.getElementById("pn").value);
+ put("bio",document.getElementById("pb").value);
+ load("profile");
 }
-function loadProfile(){
- const n=document.getElementById("pName");
- const b=document.getElementById("pBio");
- const r=document.getElementById("pResult");
- if(n)n.value=read("name");
- if(b)b.value=read("bio");
- if(r)r.textContent=(read("name")||"তোমার নাম")+" — "+(read("bio")||"পরিচিতি লেখা হয়নি");
+function calc(){
+ let a=Number(document.getElementById("a").value);
+ let b=Number(document.getElementById("b").value);
+ let o=document.getElementById("op").value;
+ let r=o==="+"?a+b:o==="-"?a-b:o==="*"?a*b:b===0?"শূন্য দিয়ে ভাগ করা যায় না":a/b;
+ document.getElementById("cr").textContent="ফলাফল: "+r;
 }
+function saveNote(){put("note",document.getElementById("nt").value);load("notes")}
+function clearNote(){put("note","");load("notes")}
 
-function calculate(){
- const a=Number(document.getElementById("num1").value);
- const b=Number(document.getElementById("num2").value);
- const op=document.getElementById("operator").value;
- let result;
- if(op==="+")result=a+b;
- if(op==="-")result=a-b;
- if(op==="*")result=a*b;
- if(op==="/")result=b===0?"শূন্য দিয়ে ভাগ করা যায় না":a/b;
- document.getElementById("calcResult").textContent="ফলাফল: "+result;
-}
-
-function saveNote(){
- save("note",document.getElementById("noteText").value);
- loadNote();alert("নোট সেভ হয়েছে!");
-}
-function loadNote(){
- const n=document.getElementById("noteText");
- const r=document.getElementById("noteResult");
- if(n)n.value=read("note");
- if(r)r.textContent=read("note")||"এখনও কোনো নোট নেই।";
-}
-function clearNote(){save("note","");loadNote()}
-
-function loadGallery(){
- const el=document.getElementById("galleryResult");
- if(!el)return;
- let arr=[];
- try{arr=JSON.parse(read("gallery")||"[]")}catch(e){}
- el.innerHTML=arr.map(x=>
- `<div class="tile" style="margin-top:8px">
- <b>${esc(x.title)}</b><p><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.url)}</a></p>
- </div>`).join("")||"<p>এখনও কোনো লিংক নেই।</p>";
-}
 function addGallery(){
- const title=document.getElementById("gTitle").value.trim();
- const url=document.getElementById("gUrl").value.trim();
- if(!title||!/^https?:\/\//i.test(url)){
- alert("নাম এবং সঠিক https:// লিংক দাও");return;
- }
- let arr=[];
- try{arr=JSON.parse(read("gallery")||"[]")}catch(e){}
- arr.unshift({title,url});
- save("gallery",JSON.stringify(arr.slice(0,30)));
- loadGallery();
+ let t=document.getElementById("gt").value.trim();
+ let u=document.getElementById("gu").value.trim();
+ if(!t||!/^https?:\/\//i.test(u)){alert("নাম ও http/https লিংক দাও");return}
+ let a=[];try{a=JSON.parse(get("gallery")||"[]")}catch(e){}
+ a.unshift({t,u});put("gallery",JSON.stringify(a.slice(0,30)));load("gallery");
 }
 
-document.addEventListener("change",function(e){
- if(e.target.id==="audioFile"){
-  const f=e.target.files[0];
-  if(f)document.getElementById("audioPlayer").src=URL.createObjectURL(f);
+function load(type){
+ if(type==="profile"){
+  let n=document.getElementById("pn"),b=document.getElementById("pb"),r=document.getElementById("pr");
+  if(n)n.value=get("name");if(b)b.value=get("bio");
+  if(r)r.textContent=(get("name")||"তোমার নাম")+" — "+(get("bio")||"পরিচিতি লেখা হয়নি");
  }
-});
-
-function checkGuess(){
- const v=Number(document.getElementById("guess").value);
- const r=document.getElementById("gameResult");
- if(v<1||v>10){r.textContent="১ থেকে ১০-এর মধ্যে সংখ্যা দাও";return}
- r.textContent=v===secret?"🎉 ঠিক ধরেছ! দারুণ!":"মেলেনি! আবার চেষ্টা করো।";
-}
-function resetGame(){
- secret=Math.floor(Math.random()*10)+1;
- document.getElementById("guess").value="";
- document.getElementById("gameResult").textContent="নতুন সংখ্যা বেছে নাও!";
+ if(type==="notes"){
+  let n=document.getElementById("nt"),r=document.getElementById("nr");
+  if(n)n.value=get("note");if(r)r.textContent=get("note")||"এখনও কোনো নোট নেই";
+ }
+ if(type==="gallery"){
+  let r=document.getElementById("gr");
+  if(r){let a=[];try{a=JSON.parse(get("gallery")||"[]")}catch(e){}
+   r.innerHTML=a.map(x=>`<div class="tile"><b>${esc(x.t)}</b><p><a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.u)}</a></p></div>`).join("")||"<p>এখনও কোনো লিংক নেই।</p>";
+  }
+ }
+ if(type==="contact"){
+  let d={};try{d=JSON.parse(get("contact")||"{}")}catch(e){}
+  let n=document.getElementById("cn"),i=document.getElementById("ci"),m=document.getElementById("cm"),r=document.getElementById("conr");
+  if(n)n.value=d.n||"";if(i)i.value=d.i||"";if(m)m.value=d.m||"";
+  if(r)r.textContent=d.n?"সেভ করা নাম: "+d.n:"তথ্য এই ডিভাইসে সেভ হবে";
+ }
 }
 
 function saveContact(){
- const data={
-  name:document.getElementById("cName").value,
-  info:document.getElementById("cInfo").value,
-  msg:document.getElementById("cMsg").value
- };
- save("contact",JSON.stringify(data));
- loadContact();alert("তথ্য সেভ হয়েছে!");
-}
-function loadContact(){
- let d={};
- try{d=JSON.parse(read("contact")||"{}")}catch(e){}
- const n=document.getElementById("cName");
- const i=document.getElementById("cInfo");
- const m=document.getElementById("cMsg");
- const r=document.getElementById("cResult");
- if(n)n.value=d.name||"";
- if(i)i.value=d.info||"";
- if(m)m.value=d.msg||"";
- if(r)r.textContent=d.name?"সেভ করা নাম: "+d.name:"তথ্য এই ডিভাইসে সেভ হবে।";
+ put("contact",JSON.stringify({
+  n:document.getElementById("cn").value,
+  i:document.getElementById("ci").value,
+  m:document.getElementById("cm").value
+ }));
+ load("contact");
 }
 
-function loadPageData(type){
- if(type==="profile")loadProfile();
- if(type==="notes")loadNote();
- if(type==="gallery")loadGallery();
- if(type==="contact")loadContact();
+document.addEventListener("change",e=>{
+ if(e.target.id==="af"&&e.target.files[0])
+  document.getElementById("ap").src=URL.createObjectURL(e.target.files[0]);
+});
+
+function checkGame(){
+ let v=Number(document.getElementById("guess").value);
+ document.getElementById("gameResult").textContent=
+ v===secret?"🎉 ঠিক ধরেছ!":v<1||v>10?"১–১০ এর সংখ্যা দাও":"মেলেনি, আবার চেষ্টা করো";
+}
+function newGame(){
+ secret=1+Math.floor(Math.random()*10);
+ document.getElementById("guess").value="";
+ document.getElementById("gameResult").textContent="নতুন সংখ্যা বেছে নাও";
 }
 
 document.addEventListener("keydown",e=>{
- if(e.key==="ArrowRight")nextPage();
- if(e.key==="ArrowLeft")previousPage();
+ if(e.key==="ArrowRight")turn("next");
+ if(e.key==="ArrowLeft")turn("prev");
 });
-
-let startX=0;
-document.querySelector(".book").addEventListener("touchstart",e=>{
- startX=e.changedTouches[0].screenX;
-},{passive:true});
-document.querySelector(".book").addEventListener("touchend",e=>{
- const dx=e.changedTouches[0].screenX-startX;
- if(Math.abs(dx)>65){dx<0?nextPage():previousPage()}
+let sx=0;
+book.addEventListener("touchstart",e=>sx=e.changedTouches[0].screenX,{passive:true});
+book.addEventListener("touchend",e=>{
+ let dx=e.changedTouches[0].screenX-sx;
+ if(Math.abs(dx)>65)turn(dx<0?"next":"prev");
 },{passive:true});
 
 render();
 </script>
 </body>
-  </html>
+</html>
