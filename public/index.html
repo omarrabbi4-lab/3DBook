@@ -1,0 +1,579 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#100b20">
+<title>বন্ধু মহল ❤️</title>
+<style>
+:root{
+  --bg:#0c0916;--panel:#151025;--panel2:#211936;
+  --line:#33264d;--text:#f8f4ff;--muted:#afa3c8;
+  --pink:#ff5da8;--purple:#8757ff;--green:#4de0a0
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:radial-gradient(ellipse at top,#251343 0,#0c0916 55%);
+  color:var(--text);font-family:system-ui,sans-serif;min-height:100vh
+}
+button,input{font:inherit}
+button{cursor:pointer;border:0}
+.hidden{display:none!important}
+.wrap{max-width:980px;margin:auto;padding:16px}
+.brand{display:flex;align-items:center;gap:12px;margin:10px 0 22px}
+.logo{
+  width:54px;height:54px;border-radius:18px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  display:grid;place-items:center;font-size:27px
+}
+.brand h1{font-size:24px;margin:0}
+.brand p{margin:3px 0;color:var(--muted);font-size:13px}
+.panel{
+  background:#151025;border:1px solid var(--line);
+  border-radius:22px;padding:18px
+}
+.auth{max-width:450px;margin:5vh auto}
+.tabs{display:flex;background:#0e0a19;padding:4px;border-radius:13px;margin-bottom:18px}
+.tabs button{flex:1;padding:11px;background:transparent;color:var(--muted);border-radius:10px}
+.tabs button.active{background:var(--panel2);color:white}
+.field{margin:13px 0}
+.field label{display:block;font-size:13px;color:#c7badf;margin-bottom:7px}
+.field input{
+  width:100%;border:1px solid var(--line);border-radius:13px;
+  background:#0d0918;color:white;padding:13px;outline:none
+}
+.field input:focus{border-color:var(--purple)}
+.primary{
+  width:100%;padding:13px;border-radius:13px;
+  background:linear-gradient(110deg,var(--pink),var(--purple));
+  color:white;font-weight:750
+}
+.primary:disabled{opacity:.6}
+.subtle{color:var(--muted);font-size:12px;line-height:1.6}
+.error,.success{border-radius:11px;padding:10px;margin:12px 0;font-size:13px}
+.error{background:#4c1730;color:#ffdce9}
+.success{background:#103729;color:#baf9dd}
+.appgrid{display:grid;grid-template-columns:245px 1fr;gap:15px}
+.room{
+  background:linear-gradient(130deg,#39205a,#201537);
+  border:1px solid #4b326d;border-radius:16px;padding:15px;margin-bottom:18px
+}
+.room b{font-size:17px}
+.room p{font-size:12px;color:#d1c2e9;margin:6px 0 0}
+.side h3{font-size:15px}
+.member{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #2a203e}
+.avatar{
+  width:34px;height:34px;display:grid;place-items:center;
+  border-radius:12px;background:#392752;font-weight:bold
+}
+.member small{display:block;color:var(--muted);font-size:11px}
+.dot{width:8px;height:8px;background:#5b5368;border-radius:50%;margin-left:auto}
+.dot.on{background:var(--green);box-shadow:0 0 8px var(--green)}
+.chat{min-height:70vh;display:flex;flex-direction:column;padding:0;overflow:hidden}
+.chathead{
+  padding:16px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:10px
+}
+.chathead h2{font-size:17px;margin:0}
+.chathead p{font-size:12px;color:var(--muted);margin:4px 0 0}
+.logout,.ghost{
+  background:#291b3b;color:#d9c9ef;border:1px solid var(--line);
+  padding:9px 11px;border-radius:10px;font-size:12px
+}
+.feed{
+  padding:15px;display:flex;flex-direction:column;gap:13px;
+  flex:1;min-height:300px;max-height:58vh;overflow:auto
+}
+.msg{max-width:88%;align-self:flex-start;min-width:0}
+.msg.mine{align-self:flex-end}
+.msgmeta{font-size:11px;color:var(--muted);margin:0 5px 5px;display:flex;gap:7px;flex-wrap:wrap}
+.bubble{
+  background:#211936;border:1px solid #33264d;
+  border-radius:5px 16px 16px 16px;padding:11px 13px;
+  overflow-wrap:anywhere;white-space:pre-wrap
+}
+.mine .bubble{
+  background:linear-gradient(135deg,#59328b,#473078);
+  border-color:#6747a0;border-radius:16px 5px 16px 16px
+}
+.bubble a{color:#f5c4ff;overflow-wrap:anywhere}
+.bubble img{display:block;max-width:100%;max-height:260px;border-radius:10px;margin-top:7px}
+.reactions,.msgtools{display:flex;gap:5px;flex-wrap:wrap;margin:6px 3px}
+.react{background:#211936;border:1px solid #44325e;color:white;border-radius:99px;padding:4px 8px;font-size:12px}
+.react.mine{border-color:var(--pink);background:#4a2047}
+.msgtools button{background:transparent;color:#bcaed5;padding:3px}
+.quick{display:flex;gap:7px;flex-wrap:wrap;padding:0 13px 12px}
+.quick button{background:#251a39;color:#ded0f5;border:1px solid #3d2b57;border-radius:10px;padding:7px 10px}
+.compose{border-top:1px solid var(--line);padding:12px;display:flex;gap:8px}
+.compose input{
+  flex:1;min-width:0;background:#0d0918;border:1px solid var(--line);
+  color:white;border-radius:13px;padding:12px
+}
+.send{
+  width:45px;height:45px;border-radius:13px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));color:white;font-size:20px
+}
+.empty{text-align:center;color:var(--muted);margin:auto;padding:25px 10px}
+.footer{text-align:center;color:#786b92;font-size:11px;padding:18px}
+@media(max-width:720px){
+  .wrap{padding:11px}
+  .appgrid{grid-template-columns:1fr}
+  .side{order:2}.chat{order:1;min-height:65vh}
+  .side .memberslist{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+  .feed{max-height:54vh}
+  .auth{margin:2vh auto}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="brand">
+    <div class="logo">💬</div>
+    <div>
+      <h1>বন্ধু মহল ❤️</h1>
+      <p>১০ বন্ধুর নিজস্ব আড্ডাখানা</p>
+    </div>
+  </header>
+
+  <section id="authView" class="panel auth">
+    <div class="tabs">
+      <button id="loginTab" class="active" type="button">লগইন</button>
+      <button id="registerTab" type="button">নতুন অ্যাকাউন্ট</button>
+    </div>
+
+    <form id="authForm">
+      <div id="nameField" class="field hidden">
+        <label for="name">তোমার নাম</label>
+        <input id="name" maxlength="40" autocomplete="name" placeholder="যেমন: রাব্বি">
+      </div>
+
+      <div class="field">
+        <label for="phone">বাংলাদেশি মোবাইল নম্বর</label>
+        <input id="phone" inputmode="tel" autocomplete="tel"
+          maxlength="16" placeholder="01XXXXXXXXX" required>
+      </div>
+
+      <div class="field">
+        <label for="pin">৬–৮ সংখ্যার PIN</label>
+        <input id="pin" type="password" inputmode="numeric"
+          minlength="6" maxlength="8" autocomplete="current-password"
+          placeholder="৬ সংখ্যার PIN" required>
+      </div>
+
+      <div id="inviteField" class="field hidden">
+        <label for="invite">আমন্ত্রণ কোড</label>
+        <input id="invite" autocomplete="off" placeholder="অ্যাডমিনের দেওয়া কোড">
+      </div>
+
+      <button id="authSubmit" class="primary" type="submit">লগইন করো</button>
+      <div id="authMessage" aria-live="polite"></div>
+    </form>
+
+    <p class="subtle">
+      🔒 OTP ছাড়া মোবাইল নম্বরের মালিকানা যাচাই হয় না।
+      তাই আমন্ত্রণ কোড কেবল নিজের বিশ্বস্ত বন্ধুদের দেবে।
+    </p>
+  </section>
+
+  <section id="appView" class="hidden">
+    <div class="appgrid">
+      <aside class="panel side">
+        <div class="room">
+          <b>🫶 আমাদের আড্ডা</b>
+          <p>বন্ধু মহল · সর্বোচ্চ ১০ জন</p>
+          <p id="memberCount">সদস্য লোড হচ্ছে...</p>
+        </div>
+        <h3>👥 বন্ধুরা</h3>
+        <div id="members" class="memberslist"></div>
+        <p class="subtle">🟢 সবুজ ডট মানে অনলাইনে।</p>
+        <button id="inviteHelp" class="ghost" type="button">বন্ধু যোগ করার নিয়ম</button>
+      </aside>
+
+      <main class="panel chat">
+        <div class="chathead">
+          <div>
+            <h2>💜 গ্রুপ চ্যাট</h2>
+            <p id="onlineText">অনলাইন সদস্য দেখছি...</p>
+          </div>
+          <button id="logout" class="logout" type="button">লগআউট ↗</button>
+        </div>
+
+        <div id="feed" class="feed">
+          <div class="empty">আড্ডা লোড হচ্ছে...</div>
+        </div>
+
+        <div class="quick">
+          <button type="button" data-emoji="😂">😂</button>
+          <button type="button" data-emoji="❤️">❤️</button>
+          <button type="button" data-emoji="🔥">🔥</button>
+          <button type="button" data-emoji="😎">😎</button>
+          <button type="button" id="imageLinkBtn">🖼️ ছবি-লিংক</button>
+        </div>
+
+        <form id="sendForm" class="compose">
+          <input id="messageInput" maxlength="2000" autocomplete="off"
+            placeholder="মনের কথা লিখো..." aria-label="মেসেজ লিখুন">
+          <button class="send" aria-label="পাঠান" type="submit">➤</button>
+        </form>
+        <div id="chatMessage" class="subtle" style="padding:0 14px 12px" aria-live="polite"></div>
+      </main>
+    </div>
+  </section>
+
+  <div class="footer">বন্ধু মহল ❤️ · নিজেদের আড্ডা, নিজেদের বন্ধুত্ব</div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+
+let mode = "login";
+let token = localStorage.getItem("bm_token") || "";
+let me = null;
+let socket = null;
+let messages = [];
+let online = new Set();
+let members = [];
+
+const emojis = ["😂","❤️","🔥","👍","😎","😭","🤣","🎉"];
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function time(value) {
+  try {
+    return new Date(value).toLocaleTimeString("bn-BD", {
+      hour:"2-digit", minute:"2-digit"
+    });
+  } catch {
+    return "";
+  }
+}
+
+function showMsg(id, text, kind="error") {
+  const el = $(id);
+  el.className = kind;
+  el.textContent = text;
+}
+
+async function api(url, options={}) {
+  const headers = {
+    "Content-Type":"application/json",
+    ...(options.headers || {})
+  };
+
+  if (token) headers.Authorization = "Bearer " + token;
+
+  const res = await fetch(url, { ...options, headers });
+  let data = {};
+
+  try { data = await res.json(); } catch {}
+
+  if (!res.ok) throw new Error(data.error || "সমস্যা হয়েছে।");
+  return data;
+}
+
+function setMode(next) {
+  mode = next;
+  $("loginTab").classList.toggle("active", mode === "login");
+  $("registerTab").classList.toggle("active", mode === "register");
+  $("nameField").classList.toggle("hidden", mode !== "register");
+  $("inviteField").classList.toggle("hidden", mode !== "register");
+  $("authSubmit").textContent =
+    mode === "login" ? "লগইন করো" : "অ্যাকাউন্ট তৈরি করো";
+  $("authMessage").textContent = "";
+}
+
+$("loginTab").onclick = () => setMode("login");
+$("registerTab").onclick = () => setMode("register");
+
+$("authForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const button = $("authSubmit");
+  button.disabled = true;
+  button.textContent = "অপেক্ষা করো...";
+
+  try {
+    const payload = {
+      phone: $("phone").value.trim(),
+      pin: $("pin").value
+    };
+
+    const data = await api(
+      mode === "login" ? "/api/login" : "/api/register",
+      {
+        method:"POST",
+        body:JSON.stringify(
+          mode === "login" ? payload : {
+            ...payload,
+            name:$("name").value,
+            invite:$("invite").value.trim()
+          }
+        )
+      }
+    );
+
+    token = data.token;
+    me = data.user;
+    localStorage.setItem("bm_token", token);
+    await enterApp();
+  } catch (error) {
+    showMsg("authMessage", error.message);
+  } finally {
+    button.disabled = false;
+    button.textContent =
+      mode === "login" ? "লগইন করো" : "অ্যাকাউন্ট তৈরি করো";
+  }
+});
+
+async function enterApp() {
+  try {
+    if (!me) me = (await api("/api/me")).user;
+
+    $("authView").classList.add("hidden");
+    $("appView").classList.remove("hidden");
+
+    await Promise.all([loadMembers(), loadMessages()]);
+    connectSocket();
+  } catch (error) {
+    token = "";
+    me = null;
+    localStorage.removeItem("bm_token");
+    $("authView").classList.remove("hidden");
+    $("appView").classList.add("hidden");
+    showMsg("authMessage", error.message);
+  }
+}
+
+async function loadMembers() {
+  const data = await api("/api/members");
+  members = data.members;
+  renderMembers();
+}
+
+function renderMembers() {
+  $("memberCount").textContent = `${members.length}/১০ জন সদস্য`;
+
+  $("members").innerHTML = members.map(member => `
+    <div class="member">
+      <div class="avatar">${esc((member.name || "?").slice(0,1))}</div>
+      <div style="min-width:0">
+        <div>${esc(member.name)} ${member.id === me.id ? "<small>(তুমি)</small>" : ""}</div>
+        <small>${member.role === "admin" ? "👑 অ্যাডমিন" : "বন্ধু"}</small>
+      </div>
+      <span class="dot ${online.has(member.id) ? "on" : ""}"></span>
+    </div>
+  `).join("");
+
+  const count = members.filter(member => online.has(member.id)).length;
+  $("onlineText").textContent = `${count} জন অনলাইনে · ${members.length} জন সদস্য`;
+}
+
+async function loadMessages() {
+  const data = await api("/api/messages");
+  messages = data.messages;
+  renderMessages();
+}
+
+function renderMessages() {
+  const feed = $("feed");
+
+  if (!messages.length) {
+    feed.innerHTML = `
+      <div class="empty">
+        👋 আড্ডার শুরুটা তুমিই করো!<br>
+        বন্ধুদের একটা মেসেজ পাঠাও।
+      </div>`;
+    return;
+  }
+
+  feed.innerHTML = messages.map(message => {
+    const mine = me && message.user_id === me.id;
+
+    let content;
+    if (message.kind === "image") {
+      const url = esc(message.body);
+      content = `<a href="${url}" target="_blank" rel="noopener noreferrer">ছবিটি খুলুন</a>
+        <img src="${url}" alt="শেয়ার করা ছবি" loading="lazy"
+        onerror="this.style.display='none'">`;
+    } else {
+      content = esc(message.body).replace(
+        /(https?:\/\/[^\s]+)/g,
+        '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+      );
+    }
+
+    const reactions = (message.reactions || []).map(reaction => `
+      <button class="react ${reaction.mine ? "mine" : ""}"
+        data-react="${esc(reaction.emoji)}"
+        data-id="${esc(message.id)}">
+        ${esc(reaction.emoji)} ${reaction.count}
+      </button>
+    `).join("");
+
+    const reactionButtons = emojis.map(emoji => `
+      <button type="button" data-react="${emoji}"
+        data-id="${esc(message.id)}" aria-label="${emoji}">${emoji}</button>
+    `).join("");
+
+    return `
+      <article class="msg ${mine ? "mine" : ""}" data-message="${esc(message.id)}">
+        <div class="msgmeta">
+          <b>${esc(message.name || "বন্ধু")}</b>
+          ${message.role === "admin" ? "👑" : ""}
+          <span>${time(message.created_at)}</span>
+        </div>
+        <div class="bubble">${content}</div>
+        <div class="reactions">${reactions}</div>
+        <div class="msgtools">
+          ${reactionButtons}
+          ${mine ? `<button type="button" data-delete="${esc(message.id)}" title="নিজের মেসেজ মুছুন">🗑️</button>` : ""}
+        </div>
+      </article>`;
+  }).join("");
+
+  feed.scrollTop = feed.scrollHeight;
+}
+
+function connectSocket() {
+  if (socket) socket.disconnect();
+
+  socket = io({ auth:{ token } });
+
+  socket.on("new-message", message => {
+    if (!messages.some(item => item.id === message.id)) {
+      messages.push(message);
+      if (messages.length > 100) messages.shift();
+      renderMessages();
+    }
+  });
+
+  socket.on("message-deleted", ({ id }) => {
+    messages = messages.filter(message => message.id !== id);
+    renderMessages();
+  });
+
+  socket.on("reaction-update", update => {
+    const message = messages.find(item => item.id === update.id);
+    if (message) {
+      message.reactions = update.reactions;
+      renderMessages();
+    }
+  });
+
+  socket.on("presence", list => {
+    online = new Set(list.map(user => user.id));
+    renderMembers();
+  });
+
+  socket.on("connect", () => {
+    $("chatMessage").textContent = "লাইভ আড্ডা সংযুক্ত ❤️";
+  });
+
+  socket.on("connect_error", () => {
+    showMsg("chatMessage", "লাইভ সংযোগ হচ্ছে না। পেজ রিফ্রেশ করে দেখো।");
+  });
+}
+
+$("sendForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const input = $("messageInput");
+  const body = input.value.trim();
+  if (!body) return;
+
+  input.disabled = true;
+
+  try {
+    await api("/api/messages", {
+      method:"POST",
+      body:JSON.stringify({ body })
+    });
+    input.value = "";
+    $("chatMessage").textContent = "";
+  } catch (error) {
+    showMsg("chatMessage", error.message);
+  } finally {
+    input.disabled = false;
+    input.focus();
+  }
+});
+
+document.querySelectorAll("[data-emoji]").forEach(button => {
+  button.onclick = () => {
+    const input = $("messageInput");
+    input.value += (input.value ? " " : "") + button.dataset.emoji;
+    input.focus();
+  };
+});
+
+$("feed").addEventListener("click", async event => {
+  const reaction = event.target.closest("[data-react]");
+  const deletion = event.target.closest("[data-delete]");
+
+  try {
+    if (reaction) {
+      await api(
+        `/api/messages/${encodeURIComponent(reaction.dataset.id)}/reactions`,
+        {
+          method:"POST",
+          body:JSON.stringify({ emoji:reaction.dataset.react })
+        }
+      );
+    }
+
+    if (deletion && confirm("নিজের এই মেসেজটি মুছে ফেলবে?")) {
+      await api(
+        `/api/messages/${encodeURIComponent(deletion.dataset.delete)}`,
+        { method:"DELETE" }
+      );
+    }
+  } catch (error) {
+    showMsg("chatMessage", error.message);
+  }
+});
+
+$("imageLinkBtn").onclick = () => {
+  const link = prompt("ছবির সরাসরি http:// অথবা https:// লিংক পেস্ট করো।");
+  if (!link) return;
+
+  api("/api/messages", {
+    method:"POST",
+    body:JSON.stringify({ body:link, kind:"image" })
+  }).then(() => {
+    showMsg("chatMessage", "ছবি-লিংক পাঠানো হয়েছে।", "success");
+  }).catch(error => showMsg("chatMessage", error.message));
+};
+
+$("inviteHelp").onclick = () => {
+  alert(
+    "বন্ধুদের ওয়েবসাইটের লিংক এবং Render-এ সেট করা গোপন GROUP_INVITE_CODE দাও। " +
+    "কোডটি প্রকাশ্যে পোস্ট কোরো না। ১০টি অ্যাকাউন্ট পূর্ণ হলে নতুন অ্যাকাউন্ট হবে না।"
+  );
+};
+
+$("logout").onclick = () => {
+  if (socket) socket.disconnect();
+
+  token = "";
+  me = null;
+  messages = [];
+  online.clear();
+
+  localStorage.removeItem("bm_token");
+  $("appView").classList.add("hidden");
+  $("authView").classList.remove("hidden");
+  setMode("login");
+};
+
+(async () => {
+  if (token) await enterApp();
+})();
+</script>
+</body>
+</html>
